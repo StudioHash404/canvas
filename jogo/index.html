@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Carros</title>
+  <style>
+    body {
+      text-align: center;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+    canvas {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanva" width="600" height="400" style="border:1px solid black;"></canvas>
+
+  <script>
+    //---------------
+    let imageCarro1 = new Image();
+    let imageCarro2 = new Image();
+
+    imageCarro1.src = 'carro2.png';
+    imageCarro2.src = 'carro1.png';
+    //--------------------
+    // pegar o canva pelo ID
+    const canvas = document.getElementById("gameCanva");
+
+    // pegar o contexto 2d
+    const ctx = canvas.getContext("2d");
+
+    // carro 1
+    let carro1 = {
+      x: 0, // posicao inicial em X
+      y: 100, // posicao inicial em Y
+      largura: 80, // largura do carro
+      altura: 40, // altura do carro
+      cor: "red", // cor do carro
+      velocidadeX: 3 // velocidade na horizontal
+    };
+
+    //carro 2
+    let carro2 = {
+      x: 520,
+      y: 200,
+      largura: 80,
+      altura: 40,
+      cor: "yellow",
+      velocidadeX: -3
+    };
+
+    // funcao para mover os carros
+    function moverCarro(carro) {
+      carro.x += carro.velocidadeX; // muda posicao x do carro
+
+      // se sair da tela pela direita, volta pra esquerda
+      if (carro.velocidadeX > 0 && carro.x > canvas.width) {
+        carro.x = -carro.largura;
+      }
+
+      // se sair da tela pela esquerda, volta pra direita
+      if (carro.velocidadeX < 0 && carro.x + carro.largura < 0) {
+        carro.x = canvas.width;
+      }
+    }
+
+    // funcao para desenhar o carro
+    //--------------------
+    function desenharCarro(carro, imagem) {
+        ctx.drawImage(imagem, carro.x, carro.y, carro.largura, carro.altura)
+    }
+
+    // funcao principal para rodar os frames
+    function atualizar() {
+      // limpar tela antes de desenhar dnv
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // mover carros
+      moverCarro(carro1);
+      moverCarro(carro2);
+
+      // desenhar carros
+      //------------------------
+      desenharCarro(carro1, imageCarro1);
+      desenharCarro(carro2, imageCarro2);
+
+        /*
+        if (
+              carro2.x < player.x + player.width &&
+              carro2.x + carro2.largura > player.x &&
+              carro2.y < player.y + player.height &&
+              carro2.y + carro2.altura > player.y
+) {
+  alert("O carro atingiu o jogador.");
+}
+        nao consegui fazer colisao
+        */
+        
+      // repetir o ciclo
+      requestAnimationFrame(atualizar);
+    }
+        // iniciar o loop após as imagens serem carregadas
+        //------------------------------
+    imageCarro1.onload = function() {
+      imageCarro2.onload = function() {
+        atualizar();
+      }
+    };
+  </script>
+</body>
+</html>
